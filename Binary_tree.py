@@ -1,4 +1,4 @@
-class Node(object):
+class TreeNode(object):
     def __init__(self, value):
         self.value = value
         self.left = None
@@ -8,13 +8,13 @@ class Node(object):
         if self.value:
             if data < self.value:
                 if self.left is None:
-                    self.left = Node(data)
+                    self.left = TreeNode(data)
                 else:
                     self.left.insert(data)
 
             elif data > self.value:
                 if self.right is None:
-                    self.right = Node(data)
+                    self.right = TreeNode(data)
                 else:
                     self.right.insert(data)
         else:
@@ -41,25 +41,57 @@ class Node(object):
         if self.right:
             self.right.PrintTree()
 
+    def maxDepth(self):
+        if self.value is None:
+            return 0
+        if self.right is None and self.left is None:
+            return 1
+        if self.left is None:
+            return self.right.maxDepth() + 1
+        if self.right is None:
+            return self.left.maxDepth() + 1
+        return max(self.right.maxDepth(), self.left.maxDepth()) + 1
 
 
-root = Node(12)
+    def minDepth(self):
+        if self.value is None:
+            return 0
+        if self.left is None and self.right is None:
+            return 1
+        if self.left is None:
+            return self.right.minDepth() + 1
+        if self.right is None:
+            return self.left.minDepth() + 1
+        return min(self.left.minDepth(), self.right.minDepth()) + 1
+
+    def printGivenLevel(self, level):
+        if self.value is None:
+            return
+        if level == 1:
+            print(self.value, end=' ')
+        else:
+            if self.left:
+                self.left.printGivenLevel(level - 1)
+            if self.right:
+                self.right.printGivenLevel(level - 1)
+
+
+def printLevelOrder(root):
+    if root.value is None:
+        return
+    height = root.maxDepth()
+    for i in range(1, height+1):
+        root.printGivenLevel(i)
+
+
+
+root = TreeNode(12)
 root.insert(6)
 root.insert(14)
 root.insert(3)
-print(root.PrintTree())
+#print(root.PrintTree())
+#print(root.maxDepth())
+#print(root.minDepth())
+#print(root.printGivenLevel(2))
 
-
-def findval(self, lkpval):
-    if lkpval < self.data:
-        if self.left is None:
-            return str(lkpval) + " Not Found"
-        return self.left.findval(lkpval)
-    elif lkpval > self.data:
-        if self.right is None:
-            return str(lkpval) + " Not Found"
-        return self.right.findval(lkpval)
-    else:
-        print(str(self.data) + ' is found')
-        
-#https://www.tutorialspoint.com/python_data_structure/python_binary_search_tree.htm
+print(printLevelOrder(root))
